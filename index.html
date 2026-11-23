@@ -751,7 +751,7 @@
           "</span></p>").join("") + "</div>"
       : "";
     const audio = report.audio
-      ? '<div class="audio-row"><audio controls preload="none" data-audio="' + esc(report.audio) + '"></audio>' +
+      ? '<div class="audio-row"><audio controls preload="metadata" data-audio="' + esc(report.audio) + '"></audio>' +
         '<span class="audio-note">Uppläst rapport</span></div>'
       : "";
     const isLatest = index === 0 ? " · Senaste" : "";
