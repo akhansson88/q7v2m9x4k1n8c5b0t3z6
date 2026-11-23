@@ -938,17 +938,14 @@
     $("feed-count").textContent = reports.length + (reports.length === 1 ? " rapport" : " rapporter");
     $("feed").innerHTML = reports.map(renderReport).join("") || '<p class="empty">Inga rapporter ännu.</p>';
     document.querySelectorAll("audio[data-audio]").forEach(el => {
-      el.addEventListener("play", async (event) => {
-        if (el.dataset.loaded) return;
-        event.preventDefault();
+      (async () => {
         try {
           el.src = await getAudio(state.key, el.dataset.audio);
           el.dataset.loaded = "1";
-          await el.play();
         } catch (err) {
           el.insertAdjacentText("afterend", "Ljudet kunde inte läsas upp.");
         }
-      });
+      })();
     });
     $("gate").style.display = "none";
     $("app").classList.add("visible");
