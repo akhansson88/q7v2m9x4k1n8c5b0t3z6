@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f1e6">
+<meta name="robots" content="noindex, nofollow">
+<title>Privat sida</title>
+<style>
+  :root {
+    --ink: #20251f;
+    --muted: #6d7167;
+    --paper: #f6f1e6;
+    --card: #fffdf7;
+    --line: #ddd4c2;
+    --moss: #3d5a45;
+    --moss-deep: #2c4333;
+    --amber: #a86d2c;
+    --amber-soft: #f1e3cc;
+    --danger: #9b3d33;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 600px at 10% -20%, #efe6d2 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font: 16px/1.55 "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+  }
+  .serif { font-family: Georgia, "Times New Roman", serif; }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+
+  /* Unlock */
+  .gate {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+  }
+  .gate-card {
+    width: min(440px, 100%);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(43, 38, 28, .12);
+    padding: 38px 34px 30px;
+  }
+  .eyebrow {
+    margin: 0 0 14px;
+    color: var(--amber);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .gate h1 {
+    margin: 0 0 8px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -.01em;
+  }
+  .gate p.lead {
+    margin: 0 0 26px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  label.field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .gate input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+  }
+  .gate input:focus {
+    border-color: var(--moss);
+    box-shadow: 0 0 0 3px rgba(61, 90, 69, .13);
+  }
+  .gate button {
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--moss-deep);
+    color: #f8f4ea;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  .gate button:hover { background: #243829; }
+  .gate .error {
+    min-height: 20px;
+    margin-top: 12px;
+    color: var(--danger);
+    font-size: 14px;
+  }
+  .gate .fine {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+
+  /* App */
+  .app { display: none; max-width: 1000px; margin: 0 auto; padding: 26px 22px 80px; }
+  .app.visible { display: block; }
+  .topbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 4.2vw, 44px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -.015em;
+  }
+  .topbar .subtitle {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .topbar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ghost {
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.55);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .ghost:hover { background: #fff; }
+
+  .week {
+    margin-top: 30px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 18px 50px rgba(43, 38, 28, .07);
+  }
+  .week-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #fffdf7, #faf5e9);
+  }
+  .week-head h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+    font-weight: 500;
+  }
+  .week-head .meta { color: var(--muted); font-size: 13px; text-align: right; }
+  .days { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .day {
+    min-height: 150px;
+    padding: 14px 12px 16px;
+    border-right: 1px solid var(--line);
+    background: rgba(255,255,255,.28);
+  }
+  .day:last-child { border-right: 0; }
+  .day.today { background: var(--amber-soft); }
+  .day.weekend { background: rgba(240, 233, 218, .45); }
+  .day .dow {
+    margin: 0;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .day .date {
+    margin: 3px 0 9px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    line-height: 1;
+  }
+  .day .item {
+    margin: 0 0 8px;
+    padding-left: 10px;
+    border-left: 2px solid var(--amber);
+    font-size: 12.8px;
+    line-height: 1.38;
+  }
+  .day .item b { display: block; font-size: 12.5px; }
+  .day .item span { color: var(--muted); }
+  .day .empty { color: #a9a695; font-size: 12.5px; }
+  .pass {
+    display: inline-block;
+    margin-top: 3px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: #f3e2c8;
+    color: #7a4c16;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    white-space: nowrap;
+  }
+
+  /* Calendar */
+  .calendar {
+    margin-top: 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(43, 38, 28, .06);
+    overflow: hidden;
+  }
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .cal-head h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  .cal-nav { display: flex; align-items: center; gap: 6px; }
+  .cal-nav button {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    font-size: 17px;
+    line-height: 1;
+  }
+  .cal-nav button:hover { background: #f7f2e6; }
+  .cal-nav .today-btn {
+    width: auto;
+    padding: 0 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .cal-dow {
+    padding: 8px 10px;
+    background: #faf5e9;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .cal-dow:last-child { border-right: 0; }
+  .cal-cell {
+    min-height: 104px;
+    padding: 7px 7px 8px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.34);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    position: relative;
+  }
+  .cal-cell:nth-child(7n) { border-right: 0; }
+  .cal-cell:hover { background: #fbf7ee; }
+  .cal-cell.other { background: #f5f0e5; color: #a6a293; cursor: default; }
+  .cal-cell.other:hover { background: #f5f0e5; }
+  .cal-cell.today { background: #f8ecd6; }
+  .cal-cell.selected { box-shadow: inset 0 0 0 2px var(--moss); background: #f3f7f1; }
+  .cal-cell .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .cal-cell.today .num { background: var(--moss-deep); color: #fff; }
+  .cal-cell .ev {
+    margin: 4px 0 0;
+    padding: 2px 5px;
+    border-left: 2px solid var(--amber);
+    background: rgba(255,255,255,.55);
+    border-radius: 0 4px 4px 0;
+    font-size: 10.5px;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cal-cell .ev.visitor { border-left-color: #a8551f; background: #fbe9d2; }
+  .cal-cell .more-count {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+  .cal-detail {
+    padding: 16px 20px 18px;
+    border-top: 1px solid var(--line);
+    background: #fdf9f0;
+  }
+  .cal-detail h3 {
+    margin: 0 0 9px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  .cal-detail .row {
+    display: flex;
+    gap: 10px;
+    padding: 7px 0;
+    border-top: 1px solid #e9e0cd;
+    font-size: 13.5px;
+  }
+  .cal-detail .row:first-of-type { border-top: 0; }
+  .cal-detail .row .time { flex: none; width: 74px; font-weight: 700; color: var(--moss-deep); }
+  .cal-detail .row .what b { display: block; }
+  .cal-detail .row .what span { color: var(--muted); }
+  .cal-detail .empty { color: var(--muted); font-size: 13.5px; }
+
+  /* Visit lists */
+  .prebook {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--amber);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+  }
+  .prebook .when {
+    color: var(--amber);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .prebook h3 {
+    margin: 4px 0 4px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    font-weight: 500;
+  }
+  .prebook .meta { color: var(--muted); font-size: 13px; }
+  .prebook .note { margin: 7px 0 0; color: var(--muted); font-size: 12.5px; }
+  .prebook .get {
+    flex: none;
+    align-self: center;
+    border: 1px solid var(--moss);
+    background: var(--moss-deep);
+    color: #f8f4ea;
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .prebook .get:hover { background: #243829; }
+  .prebook .get[disabled] { opacity: .55; cursor: default; }
+  .file-link {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 9px;
+    border: 1px solid #b98a4a;
+    border-radius: 999px;
+    background: #fff;
+    color: #7a4c16;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .file-link:hover { background: #fdf3e3; }
+  .prebook-empty { color: var(--muted); font-size: 13.5px; margin: 0 0 6px; }
+
+  .feed-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 42px 0 14px;
+  }
+  .feed-head h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+    font-weight: 500;
+  }
+  .feed-head span { color: var(--muted); font-size: 13px; }
+
+  .report {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 24px 20px;
+    margin-bottom: 14px;
+  }
+  .report-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .report h3 {
+    margin: 0 0 5px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+  .report .when { color: var(--muted); font-size: 13px; }
+  .report .badge {
+    flex: none;
+    border-radius: 999px;
+    background: #e8eee7;
+    color: var(--moss-deep);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+  }
+  .report .summary { margin: 14px 0 0; }
+  .report .summary p { margin: 0 0 10px; }
+  .report ul.changes { margin: 8px 0 0; padding-left: 19px; }
+  .report ul.changes li { margin-bottom: 5px; }
+  .report .agenda-mini {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 15px;
+    border-top: 1px solid var(--line);
+  }
+  .agenda-mini .cell {
+    background: #faf6ec;
+    border: 1px solid #e8dfcc;
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .agenda-mini b { display: block; font-size: 12px; margin-bottom: 2px; }
+  .audio-row { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .audio-row audio { width: min(560px, 100%); height: 38px; }
+  .audio-note { color: var(--muted); font-size: 12px; }
+  details.more { margin-top: 12px; }
+  details.more summary {
+    cursor: pointer;
+    color: var(--moss-deep);
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+  details.more .body { padding-top: 10px; }
+  .newmail { margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); }
+  .newmail h4 { margin: 0 0 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .newmail .mail { margin: 0 0 7px; font-size: 13.5px; }
+  .newmail .mail span { color: var(--muted); }
+  .footer { margin-top: 34px; color: var(--muted); font-size: 12px; text-align: center; }
+
+  @media (max-width: 760px) {
+    .days { grid-template-columns: 1fr; }
+    .day { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; }
+    .day:last-child { border-bottom: 0; }
+    .topbar { flex-direction: column; }
+    .report-top { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <div class="gate-card">
+    <p class="eyebrow">Privat</p>
+    <h1>Privat sida</h1>
+    <p class="lead">Ange lösenordet för att fortsätta.</p>
+    <form id="unlock-form" autocomplete="off">
+      <label class="field-label" for="password">Lösenord</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+      <button type="submit">Lås upp</button>
+      <div class="error" id="gate-error" role="status"></div>
+    </form>
+    <p class="fine">Endast för behöriga.</p>
+  </div>
+</section>
+
+<main class="app" id="app">
+  <header class="topbar">
+    <div>
+      <h1 class="title">Översikt</h1>
+      <p class="subtitle" id="subtitle">Veckoagendan</p>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="refresh" type="button">Uppdatera</button>
+      <button class="ghost" id="lock" type="button">Lås</button>
+    </div>
+  </header>
+
+  <section class="week" id="week-card">
+    <div class="week-head">
+      <h2 id="week-title">Denna vecka</h2>
+      <div class="meta" id="week-meta"></div>
+    </div>
+    <div class="days" id="days"></div>
+  </section>
+
+  <section class="calendar" id="calendar-card">
+    <div class="cal-head">
+      <h2 id="cal-title">Kalender</h2>
+      <div class="cal-nav">
+        <button type="button" id="cal-prev" aria-label="Föregående månad">‹</button>
+        <button type="button" class="today-btn" id="cal-today">Idag</button>
+        <button type="button" id="cal-next" aria-label="Nästa månad">›</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-detail" id="cal-detail"></div>
+  </section>
+
+  <div class="feed-head">
+    <h2>Besökslistor att skriva ut</h2>
+    <span id="prebook-count"></span>
+  </div>
+  <p class="prebook-empty">Ifyllda kopior av mallen: Name, Company, Host, PrebookedDate och PrebookedTime. Originalmallen ändras aldrig; blir det fler anmälda laddas samma fil upp igen med nästa version.</p>
+  <div id="prebooks"></div>
+
+  <div class="feed-head">
+    <h2>Rapporter</h2>
+    <span id="feed-count"></span>
+  </div>
+  <div id="feed"></div>
+
+  <p class="footer">Uppdateras varje morgon kl. 04:00. Skrivet och uppläst av MausBot.</p>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = (id) => document.getElementById(id);
+  const state = { key: null, feed: null, audioUrls: new Map() };
+
+  const svDay = new Intl.DateTimeFormat("sv-SE", { weekday: "long" });
+  const svDate = new Intl.DateTimeFormat("sv-SE", { day: "numeric", month: "long" });
+  const svDateTime = new Intl.DateTimeFormat("sv-SE", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
+
+  const esc = (value) => String(value == null ? "" : value)
+    .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+
+  const b64 = (buf) => {
+    let s = "";
+    const bytes = new Uint8Array(buf);
+    for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    return btoa(s);
+  };
+  const unb64 = (text) => Uint8Array.from(atob(text), c => c.charCodeAt(0));
+
+  async function deriveKey(password, salt, iterations) {
+    const material = await crypto.subtle.importKey(
+      "raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]
+    );
+    return crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt, iterations, hash: "SHA-256" },
+      material,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["decrypt"]
+    );
+  }
+
+  async function decryptJson(key, iv, data) {
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+
+  async function loadFeed(password) {
+    const res = await fetch("feed.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("feed");
+    const env = await res.json();
+    const salt = unb64(env.salt);
+    const key = await deriveKey(password, salt, env.iter);
+    const payload = await decryptJson(key, unb64(env.iv), unb64(env.data));
+    return { key, payload };
+  }
+
+  async function getAudio(key, name) {
+    if (state.audioUrls.has(name)) return state.audioUrls.get(name);
+    const res = await fetch("audio/" + encodeURIComponent(name), { cache: "no-store" });
+    if (!res.ok) throw new Error("audio");
+    const raw = new Uint8Array(await res.arrayBuffer());
+    const iv = raw.slice(0, 12);
+    const cipher = raw.slice(12);
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipher);
+    const url = URL.createObjectURL(new Blob([plain], { type: "audio/mpeg" }));
+    state.audioUrls.set(name, url);
+    return url;
+  }
+
+  async function downloadPrebook(key, file, downloadName) {
+    if (!key) throw new Error("locked");
+    const res = await fetch("files/" + encodeURIComponent(file), { cache: "no-store" });
+    if (!res.ok) throw new Error("file");
+    const raw = new Uint8Array(await res.arrayBuffer());
+    const iv = raw.slice(0, 12);
+    const cipher = raw.slice(12);
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipher);
+    const url = URL.createObjectURL(new Blob([plain], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = downloadName || "besokslista.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+
+  function prebooksForDate(date) {
+    return (state.feed && state.feed.prebooks ? state.feed.prebooks : []).filter(entry =>
+      entry.date === date
+    );
+  }
+
+  function prebookLink(entry, label) {
+    return '<a href="#" class="file-link" data-prebook="' + esc(entry.file) +
+      '" data-download="' + esc(entry.downloadName) + '">' + esc(label || "Excel-lista") + "</a>";
+  }
+
+  function dayLabel(iso) {
+    const d = new Date(iso + "T12:00:00");
+    return { dow: svDay.format(d), date: svDate.format(d) };
+  }
+
+  function todayIso() {
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
+  function renderWeek(report) {
+    const days = (report && report.days) || [];
+    $("week-title").textContent = report && report.weekLabel ? report.weekLabel : "Denna vecka";
+    $("week-meta").textContent = report && report.generatedAt
+      ? "Uppdaterad " + svDateTime.format(new Date(report.generatedAt))
+      : "";
+    const today = todayIso();
+    $("days").innerHTML = days.map(day => {
+      const { dow, date } = dayLabel(day.date);
+      const items = (day.items || []).map(item => (
+        '<p class="item"><b>' + esc(item.time || "") + (item.time ? " · " : "") + esc(item.title || "") +
+        '</b><span>' + esc(item.detail || "") + "</span>" +
+        (item.visitors && item.visitors.count ? '<span class="pass">Besökslappar: ' + esc(item.visitors.count) + "</span>" : "") +
+        "</p>"
+      )).join("");
+      const cls = day.date === today ? " day today" : (day.weekend ? " day weekend" : " day");
+      return '<div class="' + cls.trim() + '"><p class="dow">' + esc(dow) + '</p><p class="date">' +
+        esc(date) + "</p>" + (items || '<p class="empty">Inget inbokat</p>') + "</div>";
+    }).join("");
+  }
+
+  function renderReport(report, index) {
+    const days = (report.days || []).map(day => {
+      const { dow, date } = dayLabel(day.date);
+      const items = (day.items || []).map(item =>
+        "<li><b>" + esc(item.time || "") + (item.time ? " " : "") + esc(item.title || "") + "</b>" +
+        (item.detail ? " — " + esc(item.detail) : "") +
+        (item.visitors && item.visitors.count ? ' <span class="pass">Besökslappar: ' + esc(item.visitors.count) + "</span>" : "") +
+        "</li>"
+      ).join("");
+      return "<li><b>" + esc(dow) + " " + esc(date) + "</b><ul>" + (items || "<li>Inget inbokat</li>") + "</ul></li>";
+    }).join("");
+    const passDays = (report.days || []).flatMap(day => (day.items || [])
+      .filter(item => item.visitors && item.visitors.count)
+      .map(item => ({ date: day.date, item })));
+    const passByDate = [];
+    for (const { date, item } of passDays) {
+      let bucket = passByDate.find(entry => entry.date === date);
+      if (!bucket) { bucket = { date, items: [], files: prebooksForDate(date) }; passByDate.push(bucket); }
+      bucket.items.push(item);
+    }
+    const passBlock = passByDate.length
+      ? '<div class="newmail"><h4>Besökslappar att skriva ut</h4>' + passByDate.map(({ date, items, files }) => {
+          const d = dayLabel(date);
+          const names = items.map(item => esc(item.title || "") + " · " + esc(item.visitors.count) +
+            " lappar" + (item.visitors.label ? " · " + esc(item.visitors.label) : "")).join("<br>");
+          return '<p class="mail"><b>' + esc(d.dow) + " " + esc(d.date) + "</b><br><span>" + names + "</span><br>" +
+            files.map(f => prebookLink(f, "Ladda ner Excel (" + f.count + ")")).join("") + "</p>";
+        }).join("") + "</div>"
+      : "";
+    const changes = (report.changes || []).length
+      ? '<div class="newmail"><h4>Ändringar sedan föregående rapport</h4><ul class="changes">' +
+        report.changes.map(c => "<li>" + esc(c) + "</li>").join("") + "</ul></div>"
+      : "";
+    const mails = (report.newMessages || []).length
+      ? '<div class="newmail"><h4>Nya mail i genomgången</h4>' +
+        report.newMessages.map(m => '<p class="mail"><b>' + esc(m.subject || "(utan ämne)") + "</b><br><span>" +
+          esc(m.from || "") + (m.received ? " · " + esc(m.received) : "") + (m.summary ? " · " + esc(m.summary) : "") +
+          "</span></p>").join("") + "</div>"
+      : "";
+    const audio = report.audio
+      ? '<div class="audio-row"><audio controls preload="none" data-audio="' + esc(report.audio) + '"></audio>' +
+        '<span class="audio-note">Uppläst rapport</span></div>'
+      : "";
+    const isLatest = index === 0 ? " · Senaste" : "";
+    return '<article class="report">' +
+      '<div class="report-top"><div><h3>' + esc(report.headline || "Daglig rapport") + "</h3>" +
+      '<div class="when">' + esc(report.dateLabel || report.date || "") + esc(isLatest) + "</div></div>" +
+      '<span class="badge">' + esc(report.weekLabel || ("Vecka " + (report.week || ""))) + "</span></div>" +
+      '<div class="summary">' + ((report.summary || []).map(p => "<p>" + esc(p) + "</p>").join("") ||
+        (report.summaryText ? "<p>" + esc(report.summaryText) + "</p>" : "")) + "</div>" +
+      passBlock + changes + audio +
+      (days ? '<details class="more"><summary>Hela veckans agenda</summary><div class="body"><ul>' + days + "</ul></div></details>" : "") +
+      mails +
+      "</article>";
+  }
+
+  const calState = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+    selected: todayIso(),
+    events: {}
+  };
+
+  function isoOf(year, month, day) {
+    const p = (n) => String(n).padStart(2, "0");
+    return year + "-" + p(month + 1) + "-" + p(day);
+  }
+
+  function buildEvents(payload) {
+    const map = {};
+    const seen = new Set();
+    const add = (date, item) => {
+      if (!date || !item) return;
+      const key = date + "|" + (item.time || "") + "|" + (item.title || "");
+      if (seen.has(key)) return;
+      seen.add(key);
+      (map[date] = map[date] || []).push(item);
+    };
+    if (Array.isArray(payload.calendar) && payload.calendar.length) {
+      payload.calendar.forEach(entry => add(entry.date, entry));
+    } else {
+      (payload.reports || []).forEach(report => (report.days || []).forEach(day => {
+        (day.items || []).forEach(item => add(day.date, item));
+      }));
+    }
+    Object.values(map).forEach(list => list.sort((a, b) => String(a.time || "").localeCompare(String(b.time || ""))));
+    return map;
+  }
+
+  function renderCalendarDetail() {
+    const events = calState.selected ? (calState.events[calState.selected] || []) : [];
+    const title = calState.selected
+      ? new Intl.DateTimeFormat("sv-SE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+          .format(new Date(calState.selected + "T12:00:00"))
+      : "";
+    const body = events.length
+      ? events.map(item => '<div class="row"><div class="time">' + esc(item.time || "") + "</div>" +
+          '<div class="what"><b>' + esc(item.title || "") + "</b>" +
+          (item.detail ? "<span>" + esc(item.detail) + "</span>" : "") +
+          (item.visitors && item.visitors.count ? '<span class="pass">Besökslappar: ' + esc(item.visitors.count) +
+            (item.visitors.label ? " · " + esc(item.visitors.label) : "") + "</span>" : "") +
+          "</div></div>").join("")
+      : '<p class="empty">Inget inbokat den här dagen.</p>';
+    const files = events.some(item => item.visitors && item.visitors.count)
+      ? prebooksForDate(calState.selected)
+      : [];
+    const fileBlock = files.length
+      ? '<p class="mail" style="margin-top:10px">' + files.map(f =>
+          prebookLink(f, f.title + " (" + f.count + ")")).join(" ") + "</p>"
+      : "";
+    $("cal-detail").innerHTML = "<h3>" + esc(title) + "</h3>" + body + fileBlock;
+  }
+
+  function renderCalendar() {
+    const monthName = new Intl.DateTimeFormat("sv-SE", { month: "long", year: "numeric" })
+      .format(new Date(calState.year, calState.month, 1));
+    $("cal-title").textContent = monthName;
+    const first = new Date(calState.year, calState.month, 1);
+    const startOffset = (first.getDay() + 6) % 7;
+    const daysInMonth = new Date(calState.year, calState.month + 1, 0).getDate();
+    const prevMonthDays = new Date(calState.year, calState.month, 0).getDate();
+    const today = todayIso();
+    const cells = [];
+
+    for (let i = 0; i < 42; i++) {
+      const dayNumber = i - startOffset + 1;
+      let year = calState.year, month = calState.month, day = dayNumber, other = false;
+      if (dayNumber < 1) {
+        month = calState.month - 1; day = prevMonthDays + dayNumber; other = true;
+        if (month < 0) { month = 11; year--; }
+      } else if (dayNumber > daysInMonth) {
+        month = calState.month + 1; day = dayNumber - daysInMonth; other = true;
+        if (month > 11) { month = 0; year++; }
+      }
+      const iso = isoOf(year, month, day);
+      const events = other ? [] : (calState.events[iso] || []);
+      const classes = ["cal-cell"];
+      if (other) classes.push("other");
+      if (iso === today) classes.push("today");
+      if (iso === calState.selected) classes.push("selected");
+      const chips = events.slice(0, 2).map(item =>
+        '<div class="ev' + (item.visitors && item.visitors.count ? " visitor" : "") + '">' +
+        esc(item.time || "") + (item.time ? " " : "") + esc(item.title || "") + "</div>"
+      ).join("");
+      const more = events.length > 2 ? '<div class="more-count">+' + (events.length - 2) + " till</div>" : "";
+      const inner = '<span class="num">' + day + "</span>" + chips + more;
+      cells.push(other
+        ? '<div class="' + classes.join(" ") + '">' + inner + "</div>"
+        : '<button type="button" class="' + classes.join(" ") + '" data-date="' + iso + '">' + inner + "</button>");
+    }
+
+    $("cal-grid").innerHTML =
+      ["mån", "tis", "ons", "tor", "fre", "lör", "sön"].map(d => '<div class="cal-dow">' + d + "</div>").join("") +
+      cells.join("");
+    renderCalendarDetail();
+  }
+
+  $("cal-prev").addEventListener("click", () => {
+    calState.month--;
+    if (calState.month < 0) { calState.month = 11; calState.year--; }
+    calState.selected = null;
+    renderCalendar();
+  });
+  $("cal-next").addEventListener("click", () => {
+    calState.month++;
+    if (calState.month > 11) { calState.month = 0; calState.year++; }
+    calState.selected = null;
+    renderCalendar();
+  });
+  $("cal-today").addEventListener("click", () => {
+    const now = new Date();
+    calState.year = now.getFullYear();
+    calState.month = now.getMonth();
+    calState.selected = todayIso();
+    renderCalendar();
+  });
+  $("cal-grid").addEventListener("click", (event) => {
+    const cell = event.target.closest("[data-date]");
+    if (!cell) return;
+    calState.selected = cell.dataset.date;
+    renderCalendar();
+  });
+
+  function renderPrebooks(payload) {
+    const list = payload.prebooks || [];
+    $("prebook-count").textContent = list.length
+      ? list.length + (list.length === 1 ? " fil" : " filer")
+      : "";
+    if (!list.length) {
+      $("prebooks").innerHTML = '<p class="prebook-empty">Inga förbokade besök just nu. När ett besök föranmäls i mailen läggs en ifylld Excel-fil här.</p>';
+      return;
+    }
+    $("prebooks").innerHTML = list.map(entry => {
+      const d = dayLabel(entry.date);
+      const updated = entry.updatedAt
+        ? new Intl.DateTimeFormat("sv-SE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+            .format(new Date(entry.updatedAt))
+        : "";
+      const dates = (entry.dates || []).length > 1
+        ? (entry.dates || []).map(x => dayLabel(x).date).join(" och ")
+        : d.dow + " " + d.date;
+      return '<article class="prebook"><div>' +
+        '<div class="when">' + esc(dates) + " · " + esc(entry.count) + " besökare</div>" +
+        "<h3>" + esc(entry.title) + "</h3>" +
+        '<div class="meta">' + (entry.time ? "Kl. " + esc(entry.time) + " · " : "") +
+        (entry.host ? "Värd: " + esc(entry.host) + " · " : "") +
+        (updated ? "Uppdaterad " + esc(updated) : "") +
+        (entry.revision > 1 ? " · version " + esc(entry.revision) : "") + "</div>" +
+        (entry.note ? '<p class="note">' + esc(entry.note) + "</p>" : "") +
+        "</div>" +
+        '<button type="button" class="get" data-prebook="' + esc(entry.file) +
+        '" data-download="' + esc(entry.downloadName) + '">Ladda ner Excel</button>' +
+        "</article>";
+    }).join("");
+  }
+
+  function render(payload) {
+    state.feed = payload;
+    const reports = (payload.reports || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    renderWeek(reports[0] || (payload.week ? payload.week : null));
+    renderPrebooks(payload);
+    calState.events = buildEvents(payload);
+    renderCalendar();
+    $("subtitle").textContent = "Veckoagendan · " + (payload.mailbox || "Översikt");
+    $("feed-count").textContent = reports.length + (reports.length === 1 ? " rapport" : " rapporter");
+    $("feed").innerHTML = reports.map(renderReport).join("") || '<p class="empty">Inga rapporter ännu.</p>';
+    document.querySelectorAll("audio[data-audio]").forEach(el => {
+      el.addEventListener("play", async (event) => {
+        if (el.dataset.loaded) return;
+        event.preventDefault();
+        try {
+          el.src = await getAudio(state.key, el.dataset.audio);
+          el.dataset.loaded = "1";
+          await el.play();
+        } catch (err) {
+          el.insertAdjacentText("afterend", "Ljudet kunde inte läsas upp.");
+        }
+      });
+    });
+    $("gate").style.display = "none";
+    $("app").classList.add("visible");
+  }
+
+  $("unlock-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const password = $("password").value;
+    $("gate-error").textContent = "";
+    try {
+      const { key, payload } = await loadFeed(password);
+      state.key = key;
+      sessionStorage.setItem("rt-pass", password);
+      render(payload);
+    } catch (err) {
+      $("gate-error").textContent = "Fel lösenord. Försök igen.";
+    }
+  });
+
+  $("lock").addEventListener("click", () => {
+    sessionStorage.removeItem("rt-pass");
+    location.reload();
+  });
+
+  $("refresh").addEventListener("click", async () => {
+    const password = sessionStorage.getItem("rt-pass");
+    if (!password) return location.reload();
+    try {
+      const { key, payload } = await loadFeed(password);
+      state.key = key;
+      render(payload);
+    } catch (err) {}
+  });
+
+  document.addEventListener("click", async (event) => {
+    const el = event.target.closest("[data-prebook]");
+    if (!el) return;
+    event.preventDefault();
+    const original = el.textContent;
+    try {
+      el.disabled = true;
+      await downloadPrebook(state.key, el.dataset.prebook, el.dataset.download);
+    } catch (err) {
+      el.textContent = "Kunde inte laddas ner";
+    } finally {
+      setTimeout(() => { el.disabled = false; if (el.tagName === "BUTTON") el.textContent = original; }, 1200);
+    }
+  });
+
+  // A short unlock window after a reload in the same tab.
+  (async () => {
+    const saved = sessionStorage.getItem("rt-pass");
+    if (!saved) return;
+    try {
+      const { key, payload } = await loadFeed(saved);
+      state.key = key;
+      render(payload);
+    } catch (err) {
+      sessionStorage.removeItem("rt-pass");
+    }
+  })();
+})();
+</script>
+</body>
+</html>
